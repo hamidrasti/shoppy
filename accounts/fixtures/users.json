@@ -1,0 +1,36 @@
+[
+  {
+    "model": "accounts.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$RAqjek8MwTbMNNepLENHd0$kZEJ5n8OmCTyv8LVRqlMNKQbV0IzyZPdi+Is06ALYxA=",
+      "last_login": "2022-03-18 20:41:06.000000 +00:00",
+      "is_superuser": true,
+      "username": "superadmin",
+      "first_name": "SuperAdmin",
+      "last_name": "-",
+      "email": "superadmin@shoppy.com",
+      "is_staff": true,
+      "is_active": true,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$RAqjek8MwTbMNNepLENHd0$kZEJ5n8OmCTyv8LVRqlMNKQbV0IzyZPdi+Is06ALYxA=",
+      "last_login": "2022-03-18 20:41:06.000000 +00:00",
+      "is_superuser": false,
+      "username": "admin",
+      "first_name": "Admin",
+      "last_name": "-",
+      "email": "admin@shoppy.com",
+      "is_staff": true,
+      "is_active": true,
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
