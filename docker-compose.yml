@@ -11,6 +11,8 @@ services:
     command: sh ./wait-for postgres:${DB_PORT} -- ./docker-entrypoint.sh
     env_file:
       - .env
+    environment:
+      - IS_CONTAINER=yes
     depends_on:
       - postgres
   postgres:
