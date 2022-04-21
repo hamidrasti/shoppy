@@ -9,6 +9,7 @@ admin.site.index_title = 'Admin'
 
 api_urlpatterns = [
     path('accounts/', include('accounts.urls')),
+    path('shop/', include('shop.urls')),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('schema/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
