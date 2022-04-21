@@ -85,7 +85,7 @@ class ProductsTestCase(TestCase):
         }
 
         response = self.admin_client.post(reverse('shop:products-list'), payload)
-        print(response.data)
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         product = Product.objects.get(id=response.data['id'])
 
@@ -132,3 +132,55 @@ class ProductsTestCase(TestCase):
         response = self.client.delete(reverse('shop:products-detail', args=[product.id]))
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_if_search_in_products_works_fine(self):
+        products = [
+            sample_product(title='Product1 blue'),
+            sample_product(title='Product2 light blue'),
+            sample_product(title='Product3 red'),
+        ]
+
+        response = self.client.get(reverse('shop:products-list') + '?search=blue')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 2)
+
+    def test_if_products_are_filtered_by_color(self):
+        products = [
+            sample_product(title='Product1', color='red'),
+            sample_product(title='Product2', color='green'),
+            sample_product(title='Product3', color='blue'),
+        ]
+
+        response = self.client.get(reverse('shop:products-list') + '?color=red')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(response.data['results'][0]['color'], 'red')
+
+    def test_if_products_are_ordered_by_price_ascending(self):
+        products = [
+            sample_product(title='Product2', price=200),
+            sample_product(title='Product1', price=100),
+            sample_product(title='Product3', price=300),
+        ]
+
+        response = self.client.get(reverse('shop:products-list') + '?ordering=price')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], len(products))
+        self.assertEqual(response.data['results'][0]['price'], 100)
+
+    def test_if_products_are_filtered_by_price_range(self):
+        products = [
+            sample_product(title='Product2', price=200),
+            sample_product(title='Product1', price=100),
+            sample_product(title='Product3', price=300),
+            sample_product(title='Product4', price=400),
+            sample_product(title='Product5', price=500),
+        ]
+
+        response = self.client.get(reverse('shop:products-list') + '?price__gte=200&price__lte=400')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 3)
