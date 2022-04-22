@@ -109,7 +109,7 @@ now we have two user with this info:
     }
     ```
 
-- superadmin
+- admin
     ```json
     {
       "password": "pass123456",
