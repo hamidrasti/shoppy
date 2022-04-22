@@ -18,7 +18,6 @@ def sample_cart():
 class CartsTestCase(TestCase):
 
     def setUp(self):
-
         self.guest_client = APIClient()
 
         self.client = APIClient()
@@ -78,3 +77,13 @@ class CartsTestCase(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # self.assertEqual(len(brands), len(response.data))
+
+    def test_create_an_order_with_empty_cart_returns_400(self):
+        payload = {
+            'cart_id': str(sample_cart().id)
+        }
+
+        response = self.admin_client.post(reverse('shop:orders-list'), payload)
+        print(response.data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

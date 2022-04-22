@@ -83,4 +83,4 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.PROTECT, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='orderitems')
     quantity = models.PositiveSmallIntegerField(validators=[MinValueValidator(1)])
-    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
+    unit_price = MoneyField(max_digits=14, decimal_places=2, default_currency='IRR')

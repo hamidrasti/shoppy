@@ -82,29 +82,40 @@ class UpdateProductSerializer(serializers.ModelSerializer):
 
 class CartItemSerializer(serializers.ModelSerializer):
     product = SimpleProductSerializer()
+    price_currency = serializers.SerializerMethodField()
     total_price = serializers.SerializerMethodField()
 
     class Meta:
         model = CartItem
         read_only_fields = ('id',)
-        fields = ('id', 'product', 'quantity', 'total_price',)
+        fields = ('id', 'product', 'quantity', 'price_currency', 'total_price',)
+
+    def get_price_currency(self, cart_item: CartItem):
+        return str(cart_item.product.price.currency)
 
     def get_total_price(self, cart_item: CartItem):
-        return cart_item.quantity * cart_item.product.price
+        total = cart_item.quantity * cart_item.product.price
+        return total.amount
 
 
 class CartSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     items = CartItemSerializer(many=True, read_only=True)
+    price_currency = serializers.SerializerMethodField()
     total_price = serializers.SerializerMethodField()
 
     class Meta:
         model = Cart
         read_only_fields = ('id',)
-        fields = ('id', 'items', 'total_price',)
+        fields = ('id', 'items', 'price_currency', 'total_price',)
+
+    def get_price_currency(self, cart: Cart):
+        for item in cart.items.all():
+            return str(item.product.price.currency)
+        return 'IRR'
 
     def get_total_price(self, cart: Cart):
-        return sum([item.quantity * item.product.price for item in cart.items.all()])
+        return sum([item.quantity * item.product.price.amount for item in cart.items.all()])
 
 
 class AddCartItemSerializer(serializers.ModelSerializer):
@@ -148,23 +159,29 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderItem
-        fields = ('id', 'product', 'unit_price', 'quantity', 'total_price',)
+        fields = ('id', 'product', 'unit_price', 'unit_price_currency', 'quantity', 'total_price',)
 
     def get_total_price(self, order_item: OrderItem):
-        return order_item.quantity * order_item.product.price
+        return order_item.quantity * order_item.product.price.amount
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(many=True)
+    items = OrderItemSerializer(many=True, read_only=True)
+    price_currency = serializers.SerializerMethodField()
     total_price = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         read_only_fields = ('id',)
-        fields = ('id', 'user', 'placed_at', 'status', 'items', 'total_price',)
+        fields = ('id', 'user', 'placed_at', 'status', 'items', 'price_currency', 'total_price',)
+
+    def get_price_currency(self, order: Order):
+        for item in order.items.all():
+            return str(item.product.price.currency)
+        return 'IRR'
 
     def get_total_price(self, order: Order):
-        return sum([item.quantity * item.product.price for item in order.items.all()])
+        return sum([item.quantity * item.product.price.amount for item in order.items.all()])
 
 
 class UpdateOrderSerializer(serializers.ModelSerializer):
