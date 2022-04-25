@@ -89,3 +89,31 @@ To see all url routes, run:
 ```shell
 docker-compose run --rm app sh -c "python manage.py show_urls"
 ```
+
+## Load Data
+
+To create two users for testing, run:
+
+```shell
+docker-compose run --rm app sh -c "python manage.py loaddata users"
+```
+
+now we have two user with this info:
+
+- superadmin
+    ```json
+    {
+      "password": "pass123456",
+      "username": "superadmin",
+      "email": "superadmin@shoppy.com"
+    }
+    ```
+
+- admin
+    ```json
+    {
+      "password": "pass123456",
+      "username": "admin",
+      "email": "admin@shoppy.com"
+    }
+    ```
