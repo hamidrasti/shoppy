@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_extensions',
     'django_filters',
+    'graphene_django',
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_spectacular',
@@ -168,4 +169,8 @@ SPECTACULAR_SETTINGS = {
     ],
     'SERVE_INCLUDE_SCHEMA': False,
     'SERVE_PERMISSIONS': ['rest_framework.permissions.IsAdminUser'],
+}
+
+GRAPHENE = {
+    'SCHEMA': 'shoppy.schema.schema'
 }

@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
+from graphene_django.views import GraphQLView
 
 admin.site.site_header = 'Shoppy Admin'
 admin.site.index_title = 'Admin'
@@ -10,6 +11,7 @@ admin.site.index_title = 'Admin'
 api_urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('shop/', include('shop.urls')),
+    path('graphql', GraphQLView.as_view(graphiql=True)),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('schema/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
