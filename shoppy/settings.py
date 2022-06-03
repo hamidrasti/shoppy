@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'azbankgateways',
     'corsheaders',
     'debug_toolbar',
     'django_extensions',
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'djmoney',
     'accounts',
+    'payments',
     'shop',
 ]
 
@@ -174,3 +176,21 @@ SPECTACULAR_SETTINGS = {
 GRAPHENE = {
     'SCHEMA': 'shoppy.schema.schema'
 }
+
+AZ_IRANIAN_BANK_GATEWAYS = {
+    'GATEWAYS': {
+        'ZARINPAL': {
+            'MERCHANT_CODE': os.environ.get('ZARINPAL_MERCHANT_CODE'),
+        },
+    },
+    'IS_SAMPLE_FORM_ENABLE': True,
+    'DEFAULT': 'ZARINPAL',
+    'CURRENCY': 'IRR',
+    'TRACKING_CODE_QUERY_PARAM': 'tc',
+    'TRACKING_CODE_LENGTH': 16,
+    'SETTING_VALUE_READER_CLASS': 'azbankgateways.readers.DefaultReader',
+    'BANK_PRIORITIES': [],
+}
+
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
